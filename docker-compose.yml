@@ -1,0 +1,21 @@
+services:
+  signal-api:
+    image: "${IMAGE}"
+    container_name: "signal-api"
+    restart: "always"
+    networks:
+      - "reverse-proxy"
+    ports:
+      - "9922:8080"
+    environment:
+      - AUTO_RECEIVE_SCHEDULE=0 22 * * *
+    volumes:
+      - "./data/:/home/.local/share/signal-cli/"
+    labels:
+      - "diun.enable=true"
+      - "diun.include_tags=^0\\.\\d+$"
+
+networks:
+  reverse-proxy:
+    external: true
+
