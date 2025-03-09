@@ -5,13 +5,19 @@ services:
     restart: "always"
     networks:
       - "reverse-proxy"
-    ports:
-      - "9922:8080"
+    expose:
+      - "80"
     environment:
       - AUTO_RECEIVE_SCHEDULE=0 22 * * *
+      - SWAGGER_HOST=signal-api.home.tastic
+      - SWAGGER_IP=signal-api.home.tastic
+      - PORT=80
     volumes:
       - "./data/:/home/.local/share/signal-cli/"
     labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.signal-api.entrypoints=web"
+      - "traefik.http.routers.signal-api.rule=Host(`signal-api.home.tastic`)"
       - "diun.enable=true"
       - "diun.include_tags=^0\\.\\d+$"
 
